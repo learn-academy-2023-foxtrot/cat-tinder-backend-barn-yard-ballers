@@ -41,5 +41,24 @@ RSpec.describe "Cows", type: :request do
       end
     end
 
+    it "doesn't create a cow without a name" do
+      cow_params = {
+        cow: {
+          breed: "Belgian Blue",
+          age: 12,
+          hobby: "Lift weights",
+          image: "https://livestockmiddleeast.com/wp-content/uploads/2019/06/KUBITUS-DE-BRAY-455716400-6047-e1561536471567.jpg"
+        }
+      }
+
+      post '/cows', params: cow_params
+
+      expect(response.status).to eq 422
+
+      json = JSON.parse(response.body)
+
+      expect(json['name']).to include "can't be blank"
+    end
+
   end
 end
